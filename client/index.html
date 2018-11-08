@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Reports Generator</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="main.js"></script>
+      <link rel="stylesheet" href="main.css">
+      <!-- materialize css https://materializecss.com -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <!-- material-icons https://material.io/tools/icons/?style=baseline -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+      <h1>Reports Generator</h1>
+      <form class="pure-form-stacked" method="POST" action="/reports" enctype="multipart/form-data">
+            <div class="file-field input-field">
+                  <div class="btn">
+                        <span>File</span>
+                        <input type="file" name="upload" multiple>
+                  </div>
+                  <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                  </div>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                  <i class="material-icons right">send</i>
+            </button>
+      </form>
+      <!-- materialize js https://materializecss.com -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>
