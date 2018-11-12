@@ -15,30 +15,33 @@ router.post("/", upload.array("upload", 3), (req, res) => {
   }
 
   let csvData = requestFilesToArrays(req.files)
-
+  console.log(csvData)
   let reportName = "Book1"
   let fileName = `${reportName}.xlsx`
-  let wb = xlsx.assessmentReport(csvData[0][0][0])
+  let wb = xlsx.assessmentReport(csvData[0].data[0][0]) // example for putting the first item of first array into cell A1 in the first sheet
   wb.write(fileName, res)
   deleteAllTempFiles()
 })
 
 function requestFilesToArrays(files) {
-  filesObject = []
+  let filesArray = []
 
   for (file of files) {
-    let fileObject = []
+    let fileObject = {
+      data: [],
+      name: file.originalname.slice(0, file.originalname.indexOf("crosstab")).replace(/_/g, " ").trim(),
+    }
     let decoded = fs.readFileSync(path.join(__dirname, file.path), { encoding: "ucs2" })
     let decodedSplit = decoded.split("\r\n")
 
     for (let i = 0; i < decodedSplit.length; i++) {
       let splitRow = decodedSplit[i].split("\t")
-      if (splitRow.length > 0 && splitRow[0] !== "") fileObject.push(splitRow)
+      if (splitRow.length > 0 && splitRow[0] !== "") fileObject.data.push(splitRow)
     }
-    filesObject.push(fileObject)
+    filesArray.push(fileObject)
   }
 
-  return filesObject
+  return filesArray
 }
 
 function deleteAllTempFiles() {
