@@ -2,7 +2,6 @@ var xl = require('excel4node')
 
 module.exports = {
       assessmentReport(data) {
-
             // create the report excel workbook
             var wb = new xl.Workbook();
             
@@ -12,6 +11,8 @@ module.exports = {
             var sheet3 = wb.addWorksheet('sheet3');
 
             // place the data
+            console.log(data)
+            sheet1.cell(1,1).string(data)
 
             // set styles
 
