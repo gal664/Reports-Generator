@@ -15,9 +15,7 @@ router.post("/", uploadInputs, (req, res) => {
     res.status(500).send("error uploading the files")
   }
   
-  let csvData = requestFilesToArrays(req.files)
-  let reportMetadata = req.query
-  let wb = xlsx.assessmentReport(reportMetadata, csvData) // example for putting the first item of first array into cell A1 in the first sheet
+  let wb = xlsx.assessmentReport(req.query, requestFilesToArrays(req.files))
   
   let reportName = "Assessment Report"
   wb.write(`${reportName}.xlsx`, res)
