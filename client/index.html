@@ -46,13 +46,36 @@
             </div>
             <div class="file-field input-field">
                   <div class="btn">
-                        <span>File</span>
-                        <input type="file" name="upload" multiple>
+                        <span>grades By Subject</span>
+                        <input type="file" name="grades_by_subject" required>
                   </div>
                   <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                        <input class="file-path validate" type="text" placeholder="Upload grades by subject csv file downloaded from tableau here">
                   </div>
             </div>
+
+            
+            <div class="file-field input-field">
+                  <div class="btn">
+                        <span>Struggling Students</span>
+                        <input type="file" name="struggling_students" required>
+                  </div>
+                  <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload struggling students csv file downloaded from tableau here">
+                  </div>
+            </div>
+
+            <div class="file-field input-field">
+                  <div class="btn">
+                        <span>Grades By Question</span>
+                        <input type="file" name="grades_by_question" required>
+                  </div>
+                  <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload grades by question csv file downloaded from tableau here">
+                  </div>
+            </div>
+
+
             <button class="btn waves-effect waves-light" type="submit" name="action">Submit
                   <i class="material-icons right">send</i>
             </button>

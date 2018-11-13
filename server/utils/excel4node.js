@@ -22,20 +22,13 @@ const wbMetadata = {
 module.exports = {
 
       assessmentReport(metadata, data) {
-            // create the report excel workbook
             let wb = new xl.Workbook()
 
-            //add spreadsheets
+            // for( item of data){
+                  
+            // }
+            
             let sheet1 = createSheetLayout(wb, metadata, "sheet1")
-
-            // place the data
-            insertMetadataValues(sheet1, metadata)
-            // console.log(data)
-            // sheet1.cell(1,1).string(data)
-
-            // set styles
-
-            // return finished report
             return (wb)
       }
 }
@@ -87,6 +80,8 @@ function createSheetLayout(wb, metadata, sheetName) {
             applyStyleToCell(sheet, item, metadataStyle)
       }
       
+      insertMetadataValues(sheet, metadata)
+
       // sheet index data
       let indexStyle = wb.createStyle({
             alignment: { horizontal: "center"},
