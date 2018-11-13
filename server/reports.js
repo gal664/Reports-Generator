@@ -15,7 +15,8 @@ router.post("/", upload.array("upload", 3), (req, res) => {
   }
 
   let csvData = requestFilesToArrays(req.files)
-  console.log(csvData)
+  // console.log(csvData)
+  
   let reportName = "Book1"
   let fileName = `${reportName}.xlsx`
   let wb = xlsx.assessmentReport(csvData[0].data[0][0]) // example for putting the first item of first array into cell A1 in the first sheet
