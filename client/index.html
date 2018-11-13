@@ -16,7 +16,34 @@
 
 <body>
       <h1>Reports Generator</h1>
-      <form class="pure-form-stacked" method="POST" action="/reports" enctype="multipart/form-data">
+      <form class="pure-form-stacked" id="report_upload_form" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                  <div class="input-field col s3">
+                        <i class="material-icons prefix">place</i>
+                        <input id="city" type="text" class="validate">
+                        <label for="city">City Name</label>
+                  </div>
+                  <div class="input-field col s3">
+                        <i class="material-icons prefix">account_balance</i>
+                        <input id="school" type="text" class="validate">
+                        <label for="school">School Name</label>
+                  </div>
+                  <div class="input-field col s2">
+                        <i class="material-icons prefix">school</i>
+                        <input id="grade" type="text" class="validate">
+                        <label for="grade">Grade</label>
+                  </div>
+                  <div class="input-field col s2">
+                        <i class="material-icons prefix">computer</i>
+                        <input id="classes" type="text" class="validate">
+                        <label for="classes">Classes</label>
+                  </div>
+                  <div class="input-field col s2">
+                        <i class="material-icons prefix">access_time</i>
+                        <input id="report_period" type="text" class="validate">
+                        <label for="report_period">Report Period</label>
+                  </div>
+            </div>
             <div class="file-field input-field">
                   <div class="btn">
                         <span>File</span>

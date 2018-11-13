@@ -21,14 +21,15 @@ const wbMetadata = {
 
 module.exports = {
 
-      assessmentReport(data) {
+      assessmentReport(metadata, data) {
             // create the report excel workbook
             let wb = new xl.Workbook()
 
             //add spreadsheets
-            let sheet1 = createSheetLayout(wb, "sheet1")
+            let sheet1 = createSheetLayout(wb, metadata, "sheet1")
 
             // place the data
+            insertMetadataValues(sheet1, metadata)
             // console.log(data)
             // sheet1.cell(1,1).string(data)
 
@@ -39,7 +40,7 @@ module.exports = {
       }
 }
 
-function createSheetLayout(wb, sheetName) {
+function createSheetLayout(wb, metadata, sheetName) {
 
       let sheetOptions = {
             sheetView: {
@@ -51,7 +52,7 @@ function createSheetLayout(wb, sheetName) {
       }
 
       let sheet = wb.addWorksheet(sheetName, sheetOptions)
-      let whiteBorderStyle = wb.createStyle({
+      let sheetBasicStyle = wb.createStyle({
             border: {
                   left: { style: "thin", color: "white" },
                   right: { style: "thin", color: "white" },
@@ -60,7 +61,7 @@ function createSheetLayout(wb, sheetName) {
             }
       })
 
-      sheet.cell(1,1,500,100).style(whiteBorderStyle)
+      sheet.cell(1,1,500,100).style(sheetBasicStyle)
       sheet.addImage({
             path: wbMetadata.logoImagePath,
             type: 'picture',
@@ -132,6 +133,14 @@ function contentToCell(sheet, cellOptions) {
 function applyStyleToCell(sheet, cellOptions, style){
       let cellLocation = xl.getExcelRowCol(cellOptions.startCell)
       sheet.cell(cellLocation.row, cellLocation.col).style(style)
+}
+
+function insertMetadataValues(sheet, metadata){
+      contentToCell(sheet,{ startCell: "B2", content: metadata.city })
+      contentToCell(sheet,{ startCell: "B3", content: metadata.school })
+      contentToCell(sheet,{ startCell: "B4", content: metadata.grade })
+      contentToCell(sheet,{ startCell: "B5", content: metadata.classes })
+      contentToCell(sheet,{ startCell: "B6", content: metadata.reportperiod })
 }
 
 // colwidth = 141px

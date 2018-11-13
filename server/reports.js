@@ -8,18 +8,19 @@ const upload = multer({ dest: tempFilesDir })
 const xlsx = require("./utils/excel4node")
 
 router.post("/", upload.array("upload", 3), (req, res) => {
-
+  
   if (!req.files) {
     reject("no files uploaded")
     res.status(500).send("error uploading the files")
   }
-
+  
   let csvData = requestFilesToArrays(req.files)
   // console.log(csvData)
   
   let reportName = "Book1"
   let fileName = `${reportName}.xlsx`
-  let wb = xlsx.assessmentReport(csvData[0].data[0][0]) // example for putting the first item of first array into cell A1 in the first sheet
+  let reportMetadata = req.query
+  let wb = xlsx.assessmentReport(reportMetadata, csvData) // example for putting the first item of first array into cell A1 in the first sheet
   wb.write(fileName, res)
   deleteAllTempFiles()
 })
