@@ -85,6 +85,50 @@ const styles = {
                   wrapText: true
             }
       },
+      reportDataNoBorderTop: {
+            border: {
+                  left: {
+                        style: "thin",
+                        color: "black"
+                  },
+                  right: {
+                        style: "thin",
+                        color: "black"
+                  },
+                  bottom: {
+                        style: "thin",
+                        color: "black"
+                  }
+            },
+            font: {
+                  bold: true
+            },
+            alignment: {
+                  vertical: "center",
+                  horizontal: "center",
+                  wrapText: true
+            }
+      },
+      reportDataNoBorderTopAndBottom: {
+            border: {
+                  left: {
+                        style: "thin",
+                        color: "black"
+                  },
+                  right: {
+                        style: "thin",
+                        color: "black"
+                  }
+            },
+            font: {
+                  bold: true
+            },
+            alignment: {
+                  vertical: "center",
+                  horizontal: "center",
+                  wrapText: true
+            }
+      },
       greenCellFill: {
             fill: {
                   type: "pattern",
@@ -117,6 +161,12 @@ const styles = {
             },
             font: {
                   color: "white"
+            }
+      },
+      fontSize20pt: {
+            font: {
+                  size: 14,
+                  bold: false
             }
       }
 };
