@@ -1,41 +1,50 @@
 const xl = require('excel4node')
 const wbMetadata = {
+      wbOptions: {
+            defaultFont: { size: 10 },
+      },
       logoImagePath: "./utils/t2k_logo.png",
       schoolData: [
-            { startCell: "A2", content: "עיר:" },
-            { startCell: "A3", content: "בית ספר:" },
-            { startCell: "A4", content: "שכבה:" },
-            { startCell: "A5", content: "כיתות:" },
-            { startCell: "A6", content: "תקופת הדוח:" }
+            { start: { row: 2, col: 4 }, content: "בית ספר:" },
+            { start: { row: 3, col: 4 }, content: "שכבה:" },
+            { start: { row: 4, col: 4 }, content: "כיתות:" },
+            { start: { row: 5, col: 4 }, content: "תאריך המבחן:" },
+            { start: { row: 6, col: 4 }, content: "שם המבחן:" }
       ],
       indexData: [
-            { startCell: "D1", endCell: "E1", merged: true, content: "מקרא" },
-            { startCell: "E2", content: "טווח ציונים" },
-            { startCell: "D2", content: "צבע" },
-            { startCell: "E3", content: "85<" },
-            { startCell: "E4", content: "74-84" },
-            { startCell: "E5", content: "59-73" },
-            { startCell: "E6", content: "<58" },
+            { start: { row: 2, col: 8 }, end: { row: 2, col: 9 }, merged: true, content: "מקרא" },
+            { start: { row: 3, col: 8 }, content: "צבע" },
+            { start: { row: 3, col: 9 }, content: "טווח ציונים" },
+            { start: { row: 4, col: 9 }, content: "85<" },
+            { start: { row: 5, col: 9 }, content: "74-84" },
+            { start: { row: 6, col: 9 }, content: "59-73" },
+            { start: { row: 7, col: 9 }, content: "<58" }
       ]
 }
+const styles = require("./excelStyles")
 
 module.exports = {
 
       assessmentReport(metadata, data) {
-            let wb = new xl.Workbook()
 
-            // for(item of data){
+            let wb = new xl.Workbook(wbMetadata.wbOptions)
+
             for (let i = 0; i < data.length; i++) {
                   switch (data[i].name) {
                         case "grades_by_subject":
-                              let grades_by_subject_sheet = createSheetLayout(wb, metadata, "ציוני תרגול")
-                              insertReportData(grades_by_subject_sheet, data[i].data, "grades_by_subject")
-                              break;
-                        case "struggling_students":
-                              let struggling_students_sheet = createSheetLayout(wb, metadata, "תרגול נוסף לפי נושאים")
+                              let sheet1 = createSheetLayout(wb, metadata, "מיפוי מיומנויות")
+                              insertReportData(wb, sheet1, data[i].data, data[i].name)
                               break;
                         case "grades_by_question":
-                              let grades_by_question_sheet = createSheetLayout(wb, metadata, "תלמידים מתקשים לפי נושא")
+                              let sheet2 = createSheetLayout(wb, metadata, "ציונים לפי שאלה")
+                              insertReportData(wb, sheet2, data[i].data, data[i].name)
+                              break;
+                        case "struggling_students":
+                              let sheet3 = createSheetLayout(wb, metadata, "מיפוי לתלמיד")
+                              insertReportData(wb, sheet3, data[i].data, data[i].name)
+
+                              let sheet4 = createSheetLayout(wb, metadata, "קבוצות לפי נושא")
+                              // insertReportData(wb, sheet4, data[i].data, data[i].name)
                               break;
                   }
             }
@@ -47,119 +56,98 @@ module.exports = {
 function createSheetLayout(wb, metadata, sheetName) {
 
       let sheetOptions = {
-            sheetView: {
-                  rightToLeft: true,
-            },
-            sheetFormat: {
-                  defaultColWidth: 18,
-            },
+            sheetView: { rightToLeft: true },
+            sheetFormat: { defaultColWidth: 18, defaultRowHeight: 18 }
       }
 
       let sheet = wb.addWorksheet(sheetName, sheetOptions)
-      let sheetBasicStyle = wb.createStyle({
-            border: {
-                  left: { style: "thin", color: "white" },
-                  right: { style: "thin", color: "white" },
-                  top: { style: "thin", color: "white" },
-                  bottom: { style: "thin", color: "white" },
-            }
-      })
+      sheet.cell(1, 1, 500, 100).style(wb.createStyle(styles.whiteBorder))
 
-      sheet.cell(1, 1, 500, 100).style(sheetBasicStyle)
       sheet.addImage({
             path: wbMetadata.logoImagePath,
             type: 'picture',
-            position: {
-                  type: 'oneCellAnchor',
-                  from: {
-                        col: 9,
-                        colOff: 0,
-                        row: 1,
-                        rowOff: 0,
-                  }
-            },
-      })
-
-      // sheet metadata
-      let metadataStyle = wb.createStyle({
-            alignment: { horizontal: "right" },
-            font: { bold: true, underline: true }
+            position: { type: 'oneCellAnchor', from: { col: 1, colOff: 0, row: 1, rowOff: 0 } },
       })
 
       for (item of wbMetadata.schoolData) {
-            contentToCell(sheet, item)
-            applyStyleToCell(sheet, item, metadataStyle)
+            sheet.cell(item.start.row, item.start.col)
+                  .string(item.content)
+                  .style(wb.createStyle(styles.metadata))
       }
 
-      insertMetadataValues(sheet, metadata)
-
-      // sheet index data
-      let indexStyle = wb.createStyle({
-            alignment: { horizontal: "center" },
-            font: { bold: true }
-      })
+      sheet.cell(2, 5).string(metadata.school)
+      sheet.cell(3, 5).string(metadata.grade)
+      sheet.cell(4, 5).string(metadata.classes)
+      sheet.cell(5, 5).string(metadata.reportdate)
+      sheet.cell(6, 5).string(metadata.assessmentname)
 
       for (item of wbMetadata.indexData) {
-            contentToCell(sheet, item)
-            applyStyleToCell(sheet, item, indexStyle)
-      }
-      let indexBorderStyle = wb.createStyle({
-            border: {
-                  left: { style: "medium", color: "black" },
-                  right: { style: "medium", color: "black" },
-                  top: { style: "medium", color: "black" },
-                  bottom: { style: "medium", color: "black" },
+            if (!item.merged) {
+                  sheet.cell(item.start.row, item.start.col)
+                        .string(item.content)
+                        .style(wb.createStyle(styles.centerBold))
+            } else {
+                  sheet.cell(item.start.row, item.start.col, item.end.row, item.end.col, item.merged)
+                        .string(item.content)
+                        .style(wb.createStyle(styles.centerBold))
             }
-      })
+      }
 
-      sheet.cell(1, 4, 6, 5).style(indexBorderStyle)
-      let greenStyle = wb.createStyle({ fill: { type: "pattern", patternType: "solid", fgColor: "#92d050" } })
-      let yellowStyle = wb.createStyle({ fill: { type: "pattern", patternType: "solid", fgColor: "#fffa00" } })
-      let orangeStyle = wb.createStyle({ fill: { type: "pattern", patternType: "solid", fgColor: "#ffbe00" } })
-      let redStyle = wb.createStyle({ fill: { type: "pattern", patternType: "solid", fgColor: "#ff0000" } })
-      sheet.cell(3, 4).style(greenStyle)
-      sheet.cell(4, 4).style(yellowStyle)
-      sheet.cell(5, 4).style(orangeStyle)
-      sheet.cell(6, 4).style(redStyle)
+      sheet.cell(2, 8, 7, 9).style(wb.createStyle(styles.mediumBlackBorder))
+      sheet.cell(4, 8).style(wb.createStyle(styles.greenCellFill))
+      sheet.cell(5, 8).style(wb.createStyle(styles.yellowCellFill))
+      sheet.cell(6, 8).style(wb.createStyle(styles.orangeCellFill))
+      sheet.cell(7, 8).style(wb.createStyle(styles.redCellFill))
 
       return sheet
 }
 
-function contentToCell(sheet, cellOptions) {    // { startCell: "D1", endCell: "E1", merged: true, content: "מקרא" }
-      if (!cellOptions.endCell) {
-            let cellLocation = xl.getExcelRowCol(cellOptions.startCell)
-            sheet.cell(cellLocation.row, cellLocation.col).string(cellOptions.content)
-      } else {
-            let cellLocation = xl.getExcelRowCol(cellOptions.startCell)
-            let endCellLocation = xl.getExcelRowCol(cellOptions.endCell)
-            sheet.cell(cellLocation.row, cellLocation.col, endCellLocation.row, endCellLocation.col, cellOptions.merged).string(cellOptions.content)
-      }
-}
+function insertReportData(wb, sheet, data, sheetType) {
+      let startingRow = 10
 
-function applyStyleToCell(sheet, cellOptions, style) {
-      let cellLocation = xl.getExcelRowCol(cellOptions.startCell)
-      sheet.cell(cellLocation.row, cellLocation.col).style(style)
-}
-
-function insertMetadataValues(sheet, metadata) {
-      contentToCell(sheet, { startCell: "B2", content: metadata.city })
-      contentToCell(sheet, { startCell: "B3", content: metadata.school })
-      contentToCell(sheet, { startCell: "B4", content: metadata.grade })
-      contentToCell(sheet, { startCell: "B5", content: metadata.classes })
-      contentToCell(sheet, { startCell: "B6", content: metadata.reportperiod })
-}
-
-function insertReportData(sheet, data, sheetType) {
-      switch (sheetType) {
-            case "grades_by_subject":
-            for(let i = 0; i < data.length; i++){
+      if (sheetType == "grades_by_subject") {
+            for (let i = 0; i < data.length; i++) {
                   let row = data[i]
-                        for(let j = 0; j < row.length; j++){
-                              sheet.cell(i + 9, j + 1).string(row[j])
+                  if (i == 0) sheet.row(startingRow).setHeight(100)
+                  for (let j = 0; j < row.length; j++) {
+                        sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        if (parseInt(row[j]) !== NaN && i > 0) {
+                              if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
+                              else if (row[j] >= 59 && row[j] <= 73) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 84) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
                         }
                   }
-                  contentToCell(sheet, { startCell: "A9", content: "שם התלמיד" })
-                  contentToCell(sheet, { startCell: "B9", content: "ציון סופי" })
-                  break;
+            }
+      } else if (sheetType == "grades_by_question") {
+            for (let i = 0; i < data.length; i++) {
+                  let row = data[i]
+                  if (i == 0) sheet.row(startingRow).setHeight(100)
+                  for (let j = 0; j < row.length; j++) {
+                        if (i == 0 && j >= 2) sheet.cell(i + startingRow, j + 1).string(`שאלה ${j - 1}`).style(wb.createStyle(styles.reportData))
+                        else sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        if (parseInt(row[j]) !== NaN && i > 0) {
+                              if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
+                              else if (row[j] >= 59 && row[j] <= 73) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 84) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
+                        }
+                  }
+            }
+      } else if (sheetType == "struggling_students") {
+            for (let i = 0; i < data.length; i++) {
+                  sheet.row(i + startingRow).setHeight(75)
+
+                  for (let j = 0; j < data[i].length; j++) {
+                        if(i > 0 && j > 0){
+                              if(data[i][j] != "") sheet.cell(j + startingRow, i + 1).string("☆").style(wb.createStyle(styles.reportData))
+                              if(data[i][j] == "") sheet.cell(j + startingRow, i + 1).string("").style(wb.createStyle(styles.reportData))
+                        } else {
+                              sheet.cell(j + startingRow, i + 1).string(data[i][j]).style(wb.createStyle(styles.reportData))
+                        }
+                  }
+            }
       }
+      sheet.cell(startingRow, 1).string("שם התלמיד")
+      sheet.cell(startingRow, 2).string("ציון סופי")
 }

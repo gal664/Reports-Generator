@@ -8,6 +8,7 @@ const upload = multer({ dest: tempFilesDir })
 const xlsx = require("./utils/excel4node")
 
 let uploadInputs = upload.fields([{ name: 'grades_by_subject', maxCount: 1 }, { name: 'struggling_students', maxCount: 1 }, { name: 'grades_by_question', maxCount: 1 }])
+
 router.post("/", uploadInputs, (req, res) => {
 
   if (!req.files) {

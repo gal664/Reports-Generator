@@ -18,12 +18,7 @@
       <h1>Reports Generator</h1>
       <form class="pure-form-stacked" id="report_upload_form" method="POST" enctype="multipart/form-data">
             <div class="row">
-                  <div class="input-field col s3">
-                        <i class="material-icons prefix">place</i>
-                        <input id="city" type="text" class="validate">
-                        <label for="city">City Name</label>
-                  </div>
-                  <div class="input-field col s3">
+                  <div class="input-field col s2">
                         <i class="material-icons prefix">account_balance</i>
                         <input id="school" type="text" class="validate">
                         <label for="school">School Name</label>
@@ -40,8 +35,13 @@
                   </div>
                   <div class="input-field col s2">
                         <i class="material-icons prefix">access_time</i>
-                        <input id="report_period" type="text" class="validate">
-                        <label for="report_period">Report Period</label>
+                        <input id="report_date" type="text" class="validate">
+                        <label for="report_date">Report Date</label>
+                  </div>
+                  <div class="input-field col s2">
+                        <i class="material-icons prefix">place</i>
+                        <input id="assessment_name" type="text" class="validate">
+                        <label for="assessment_name">Assessment Name</label>
                   </div>
             </div>
             <div class="file-field input-field">
@@ -53,18 +53,6 @@
                         <input class="file-path validate" type="text" placeholder="Upload grades by subject csv file downloaded from tableau here">
                   </div>
             </div>
-
-            
-            <div class="file-field input-field">
-                  <div class="btn">
-                        <span>Struggling Students</span>
-                        <input type="file" name="struggling_students" required>
-                  </div>
-                  <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload struggling students csv file downloaded from tableau here">
-                  </div>
-            </div>
-
             <div class="file-field input-field">
                   <div class="btn">
                         <span>Grades By Question</span>
@@ -74,8 +62,15 @@
                         <input class="file-path validate" type="text" placeholder="Upload grades by question csv file downloaded from tableau here">
                   </div>
             </div>
-
-
+            <div class="file-field input-field">
+                  <div class="btn">
+                        <span>Struggling Students</span>
+                        <input type="file" name="struggling_students" required>
+                  </div>
+                  <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload struggling students csv file downloaded from tableau here">
+                  </div>
+            </div>
             <button class="btn waves-effect waves-light" type="submit" name="action">Submit
                   <i class="material-icons right">send</i>
             </button>
