@@ -342,12 +342,35 @@ function insertReportData(wb, sheet, data, sheetType) {
                   }
             }
             
+            for (let i = 0; i < data.length; i++) {
+                  
+                  let row = data[i]
+                  
+                  if (i == 0) sheet.row(startingRow).setHeight(100)
+                  
+                  for (let j = 0; j < 2; j++) {
+                        
+                        sheet.cell(j + 16, i + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        
+                        if (parseInt(row[j]) !== NaN && i > 0) {
+                              
+                              if (row[j] >= 0 && row[j] <= 58) sheet.cell(j + 16, i + 1).style(wb.createStyle(styles.redCellFill))
+                              else if (row[j] >= 59 && row[j] <= 74) sheet.cell(j + 16, i + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 85) sheet.cell(j + 16, i + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 85 && row[j] <= 100) sheet.cell(j + 16, i + 1).style(wb.createStyle(styles.greenCellFill))
+                        
+                        }
+                  }
+            }
+
+            
+            sheet.cell(16, 1).string("כיתה")
             sheet.cell(startingRow, 1).string("כיתה")
             sheet.cell(startingRow, 2).string("ציון ממוצע")
             
       } else if (sheetType == "class_grades_by_question") {
             
-            startingRow = data.length + 2 + 20
+            startingRow = 2 + 20 + data.length
 
             for (let i = 0; i < data.length; i++) {
                   
