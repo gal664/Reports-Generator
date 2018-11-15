@@ -168,6 +168,9 @@ const styles = {
                   size: 14,
                   bold: false
             }
+      },
+      percenatage: {
+            numberFormat: '#.00%; -#.00%; -'
       }
 };
 
