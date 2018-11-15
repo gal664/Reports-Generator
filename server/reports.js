@@ -22,18 +22,18 @@ router.post("/assessmentReport", uploadInputs, (req, res) => {
   
 })
 
-// router.post("/practiceReport", uploadInputs, (req, res) => {
+router.post("/practiceReport", uploadInputs, (req, res) => {
   
-//   if (!req.files) {
-//     reject("no files uploaded")
-//     res.status(500).send("error uploading the files")
-//   }
+  if (!req.files) {
+    reject("no files uploaded")
+    res.status(500).send("error uploading the files")
+  }
   
-//   let wb = xlsx.assessmentReport(req.query, requestFilesToArrays(req.files))
-//   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן.xlsx`, res)
-//   deleteAllTempFiles()
+  let wb = xlsx.practiceReport(req.query, requestFilesToArrays(req.files))
+  wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח תרגול.xlsx`, res)
+  deleteAllTempFiles()
   
-// })
+})
 
 
 
