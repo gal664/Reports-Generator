@@ -35,6 +35,50 @@ module.exports = {
             return wb
       },
 
+      gradeAssessmentReport(metadata, data) {
+            
+            let wb = new xl.Workbook(wbMetadata.wbOptions)
+
+            let thirdSheetData = []
+
+            for (let i = 0; i < data.length; i++) {
+                  
+                  switch (data[i].name) {
+                  
+                        case "grades_by_subject":
+                              let sheet1 = createSheetLayout(wb, metadata, "מיפוי מיומנויות", data[i].name)
+                              insertReportData(wb, sheet1, data[i].data, data[i].name)
+                              break;
+                  
+                        case "grades_by_question":
+                              let sheet2 = createSheetLayout(wb, metadata, "ציונים לפי שאלה", data[i].name)
+                              insertReportData(wb, sheet2, data[i].data, data[i].name)
+                              break;            
+                        case "class_grades_by_subject":
+                        case "class_grades_by_question":
+                              thirdSheetData.push(data[i])
+                              break;
+                  }
+            }
+
+            let sheet3 = createSheetLayout(wb, metadata, "מיפוי שכבתי", "gradeMapping")
+            for (let i = 0; i < thirdSheetData.length; i++) {
+                  
+                  switch (thirdSheetData[i].name) {
+                  
+                        case "class_grades_by_subject":
+                              insertReportData(wb, sheet3, thirdSheetData[i].data, thirdSheetData[i].name)
+                              break;
+                  
+                        case "class_grades_by_question":
+                              insertReportData(wb, sheet3, thirdSheetData[i].data, thirdSheetData[i].name)
+                              break;
+                  }
+            }
+
+            return wb
+      },
+
       practiceReport(metadata, data) {
 
             let wb = new xl.Workbook(wbMetadata.wbOptions)
@@ -137,71 +181,105 @@ function createSheetLayout(wb, metadata, sheetName, sheetType) {
 }
 
 function insertReportData(wb, sheet, data, sheetType) {
+      
       let startingRow = 10
 
       if (sheetType == "grades_by_subject") {
+            
             for (let i = 0; i < data.length; i++) {
+                  
                   let row = data[i]
+                  
                   if (i == 0) sheet.row(startingRow).setHeight(100)
+                  
                   for (let j = 0; j < row.length; j++) {
+                        
                         sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        
                         if (parseInt(row[j]) !== NaN && i > 0) {
+                              
                               if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
                               else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
                               else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
                               else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
+                        
                         }
                   }
             }
+            
             sheet.cell(startingRow, 1).string("שם התלמיד")
             sheet.cell(startingRow, 2).string("ציון סופי")
 
       } else if (sheetType == "grades_by_question") {
+            
             for (let i = 0; i < data.length; i++) {
+                  
                   let row = data[i]
+                  
                   if (i == 0) sheet.row(startingRow).setHeight(100)
+                  
                   for (let j = 0; j < row.length; j++) {
+                        
                         if (i == 0 && j >= 2) sheet.cell(i + startingRow, j + 1).string(`שאלה ${j - 1}`).style(wb.createStyle(styles.reportData))
                         else sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        
                         if (parseInt(row[j]) !== NaN && i > 0) {
+                              
                               if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
                               else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
                               else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
                               else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
+                        
                         }
+                  
                   }
+            
             }
+            
             sheet.cell(startingRow, 1).string("שם התלמיד")
             sheet.cell(startingRow, 2).string("ציון סופי")
 
       } else if (sheetType == "student_mapping") {
             for (let i = 0; i < data.length; i++) {
+                  
                   sheet.row(i + startingRow).setHeight(75)
 
                   for (let j = 0; j < data[i].length; j++) {
+                        
                         if (i > 0 && j > 0) {
+                              
                               if (data[i][j] != "") sheet.cell(j + startingRow, i + 1)
                                     .string("☆")
                                     .style(wb.createStyle(styles.reportData))
                                     .style(wb.createStyle(styles.fontSize20pt))
+                              
                               if (data[i][j] == "") sheet.cell(j + startingRow, i + 1)
                                     .string("")
                                     .style(wb.createStyle(styles.reportData))
+                        
                         } else {
+                              
                               sheet.cell(j + startingRow, i + 1)
                                     .string(data[i][j])
                                     .style(wb.createStyle(styles.reportData))
+                        
                         }
                   }
             }
+
             sheet.cell(startingRow, 1).string("שם התלמיד")
 
       } else if (sheetType == "groups_by_subject") {
             let longestRow
+            
             let newData = []
+            
             for (let i = 0; i < data.length; i++) {
+                  
                   for (let j = 1; j < data[i].length; j++) {
+                        
                         let cell = data[i][j]
+                        
                         if (i == 0) {
                               let header = { name: cell, data: [] }
                               newData.push(header)
@@ -213,25 +291,88 @@ function insertReportData(wb, sheet, data, sheetType) {
             }
 
             sheet.row(startingRow).setHeight(100)
+            
             for (let i = 0; i < newData.length; i++) {
+                  
                   for (let j = 0; j < newData[i].data.length; j++) {
+                        
                         if (j == 0) {
                               sheet.cell(j + startingRow, i + 1)
                                     .string(newData[i].name)
                                     .style(wb.createStyle(styles.reportData))
                         }
+                        
                         sheet.cell(j + startingRow + 1, i + 1)
                               .string(newData[i].data[j])
                               .style(wb.createStyle(styles.reportDataNoBorderTopAndBottom))
                   }
+                  
                   sheet.cell(startingRow + longestRow - 1, i + 1)
                         .style(wb.createStyle(styles.reportDataNoBorderTop))
                   }
                   
             for (let i = 0; i < longestRow; i++){
+                  
                   sheet.cell(startingRow + i, newData.length)
                        .style(wb.createStyle(styles.reportDataNoBorderTopAndBottom))
                   
             }
+      } else if (sheetType == "class_grades_by_subject") {
+            
+            startingRow = 20
+
+            for (let i = 0; i < data.length; i++) {
+                  
+                  let row = data[i]
+                  
+                  if (i == 0) sheet.row(startingRow).setHeight(100)
+                  
+                  for (let j = 0; j < row.length; j++) {
+                        
+                        sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        
+                        if (parseInt(row[j]) !== NaN && i > 0) {
+                              
+                              if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
+                              else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
+                        
+                        }
+                  }
+            }
+            
+            sheet.cell(startingRow, 1).string("כיתה")
+            sheet.cell(startingRow, 2).string("ציון ממוצע")
+            
+      } else if (sheetType == "class_grades_by_question") {
+            
+            startingRow = data.length + 2 + 20
+
+            for (let i = 0; i < data.length; i++) {
+                  
+                  let row = data[i]
+                  
+                  if (i == 0) sheet.row(startingRow).setHeight(100)
+                  
+                  for (let j = 0; j < row.length; j++) {
+                        
+                        sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
+                        
+                        if (parseInt(row[j]) !== NaN && i > 0) {
+                              
+                              if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
+                              else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
+                        
+                        }
+                  }
+            }
+            
+            sheet.cell(startingRow, 1).string("כיתה")
+            sheet.cell(startingRow, 2).string("ציון ממוצע")
+      
       }
+
 }

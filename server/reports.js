@@ -7,7 +7,13 @@ const multer = require("multer")
 const upload = multer({ dest: tempFilesDir })
 const xlsx = require("./utils/excel4node")
 
-let uploadInputs = upload.fields([{ name: 'grades_by_subject', maxCount: 1 }, { name: 'struggling_students', maxCount: 1 }, { name: 'grades_by_question', maxCount: 1 }])
+let uploadInputs = upload.fields([
+  { name: 'grades_by_subject', maxCount: 1 },
+  { name: 'struggling_students', maxCount: 1 },
+  { name: 'grades_by_question', maxCount: 1 },
+  { name: 'class_grades_by_subject', maxCount: 1 },
+  { name: 'class_grades_by_question', maxCount: 1 }
+  ])
 
 router.post("/assessmentReport", uploadInputs, (req, res) => {
   
@@ -32,6 +38,20 @@ router.post("/practiceReport", uploadInputs, (req, res) => {
   
   let wb = xlsx.practiceReport(req.query, requestFilesToArrays(req.files))
   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח תרגול.xlsx`, res)
+  
+  deleteAllTempFiles()
+  
+})
+
+router.post("/gradeAssessmentReport", uploadInputs, (req, res) => {
+  
+  if (!req.files) {
+    reject("no files uploaded")
+    res.status(500).send("error uploading the files")
+  }
+  
+  let wb = xlsx.gradeAssessmentReport(req.query, requestFilesToArrays(req.files))
+  wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן שכבתי.xlsx`, res)
   
   deleteAllTempFiles()
   
