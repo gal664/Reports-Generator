@@ -2,81 +2,79 @@
 <html>
 
 <head>
-      <meta charset="utf-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>Reports Generator</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <script src="main.js"></script>
+</head>
+<html>
+
+<head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous">
       <link rel="stylesheet" href="main.css">
-      <!-- materialize css https://materializecss.com -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-      <!-- material-icons https://material.io/tools/icons/?style=baseline -->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <script src="main.js"></script>
+      <title>Reports Generator 2.0</title>
 </head>
 
-<body>
-      <h1>Reports Generator</h1>
-      <form class="pure-form-stacked" id="report_upload_form" method="POST" enctype="multipart/form-data">
-            <div class="row">
-                  <div class="input-field col s2">
-                        <i class="material-icons prefix">account_balance</i>
-                        <input id="school" type="text" class="validate">
-                        <label for="school">School Name</label>
+<body class="p-5">
+      <h1 class="mb-5">Welcome to Reports Generator 2.0!</h1>
+      <form id="report_upload_form" method="POST" enctype="multipart/form-data">
+            <p class="mb-1">Please select one of the report types below:</p>
+            <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons" id="selectReportType">
+                  <label class="btn btn-primary" id="assessmentReport">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Assessment Report
+                  </label>
+                  <label class="btn btn-primary" id="practiceReport">
+                        <input type="radio" name="options" id="option2" autocomplete="off" checked> Practice Report
+                  </label>
+            </div>
+            <p class="mb-1">Now, please download the report information from tableau:</p>
+            <a class="btn btn-secondary mb-3 disabled" id="tableauButton" role="button" target="_blank">Go To Tableau</a>
+            <p class="mb-1">Next, fill all of the fields below according to the report's information</p>
+            <div class="form-row">
+                  <div class="form-group col-md-2">
+                        <input type="text" id="school" class="form-control" placeholder="school" aria-label="school">
                   </div>
-                  <div class="input-field col s2">
-                        <i class="material-icons prefix">school</i>
-                        <input id="grade" type="text" class="validate">
-                        <label for="grade">Grade</label>
+                  <div class="form-group col-md-2">
+                        <input type="text" id="grade" class="form-control" placeholder="grade" aria-label="grade">
                   </div>
-                  <div class="input-field col s2">
-                        <i class="material-icons prefix">computer</i>
-                        <input id="classes" type="text" class="validate">
-                        <label for="classes">Classes</label>
+                  <div class="form-group col-md-2">
+                        <input type="text" id="classes" class="form-control" placeholder="classes" aria-label="classes">
                   </div>
-                  <div class="input-field col s2">
-                        <i class="material-icons prefix">access_time</i>
-                        <input id="report_date" type="text" class="validate">
-                        <label for="report_date">Report Date</label>
+                  <div class="form-group col-md-2">
+                        <input type="text" id="report_date" class="form-control" placeholder="report date" aria-label="report_date">
                   </div>
-                  <div class="input-field col s2">
-                        <i class="material-icons prefix">place</i>
-                        <input id="assessment_name" type="text" class="validate">
-                        <label for="assessment_name">Assessment Name</label>
+                  <div class="form-group col-md-4">
+                        <input type="text" id="assessment_name" class="form-control" placeholder="assessment name"
+                              aria-label="assessment_name">
                   </div>
             </div>
-            <div class="file-field input-field">
-                  <div class="btn">
-                        <span>grades By Subject</span>
-                        <input type="file" name="grades_by_subject" required>
-                  </div>
-                  <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload grades by subject csv file downloaded from tableau here">
+            <p class="mb-1">Now that we have all the data, upload the files you downloaded form Tableau earlier</p>
+            <div class="input-group mb-3">
+                  <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="grades_by_subject" name="grades_by_subject">
+                        <label class="custom-file-label" for="grades_by_subject">grades_by_subject</label>
                   </div>
             </div>
-            <div class="file-field input-field">
-                  <div class="btn">
-                        <span>Grades By Question</span>
-                        <input type="file" name="grades_by_question" required>
-                  </div>
-                  <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload grades by question csv file downloaded from tableau here">
+            <div class="input-group mb-3">
+                  <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="grades_by_question" name="grades_by_question">
+                        <label class="custom-file-label" for="grades_by_question">grades_by_question</label>
                   </div>
             </div>
-            <div class="file-field input-field">
-                  <div class="btn">
-                        <span>Struggling Students</span>
-                        <input type="file" name="struggling_students" required>
-                  </div>
-                  <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" placeholder="Upload struggling students csv file downloaded from tableau here">
+            <div class="input-group mb-3">
+                  <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="struggling_students" name="struggling_students">
+                        <label class="custom-file-label" for="struggling_students">struggling_students</label>
                   </div>
             </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                  <i class="material-icons right">send</i>
-            </button>
+            <button class="btn btn-primary" id="submitButton" type="submit" name="action" disabled>Button</button>
       </form>
-      <!-- materialize js https://materializecss.com -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>

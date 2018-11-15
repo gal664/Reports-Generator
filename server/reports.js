@@ -9,19 +9,34 @@ const xlsx = require("./utils/excel4node")
 
 let uploadInputs = upload.fields([{ name: 'grades_by_subject', maxCount: 1 }, { name: 'struggling_students', maxCount: 1 }, { name: 'grades_by_question', maxCount: 1 }])
 
-router.post("/", uploadInputs, (req, res) => {
-
+router.post("/assessmentReport", uploadInputs, (req, res) => {
+  
   if (!req.files) {
     reject("no files uploaded")
     res.status(500).send("error uploading the files")
   }
   
   let wb = xlsx.assessmentReport(req.query, requestFilesToArrays(req.files))
-  
-  let reportName = "Assessment Report"
-  wb.write(`${reportName}.xlsx`, res)
+  wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן.xlsx`, res)
   deleteAllTempFiles()
+  
 })
+
+// router.post("/practiceReport", uploadInputs, (req, res) => {
+  
+//   if (!req.files) {
+//     reject("no files uploaded")
+//     res.status(500).send("error uploading the files")
+//   }
+  
+//   let wb = xlsx.assessmentReport(req.query, requestFilesToArrays(req.files))
+//   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן.xlsx`, res)
+//   deleteAllTempFiles()
+  
+// })
+
+
+
 
 function requestFilesToArrays(files) {
   let filesArray = []
