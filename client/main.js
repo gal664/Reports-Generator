@@ -20,15 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
       inputs.file.grades_by_subject = createFileInputElement("grades_by_subject")
       inputs.file.grades_by_question = createFileInputElement("grades_by_question")
       inputs.file.struggling_students = createFileInputElement("struggling_students")
+      inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject")
+      inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question")
 
       for (let i = 0; i < inputs.reportTypes.types.length; i++) {
 
             let type = inputs.reportTypes.types[i]
             type.addEventListener("click", () => {
-
+                  
                   setTimeout(() => {
-
+                        
                         if (type.classList.contains("active")) selectedReportType = type.id
+                        console.log(selectedReportType)
 
                         if (selectedReportType != null) {
 
@@ -38,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     case "assessmentReport":
 
                                           while (fileInputsContainer.childNodes.length != 0) {
+                                                fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
                                           }
 
@@ -52,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     case "practiceReport":
 
                                           while (fileInputsContainer.childNodes.length != 0) {
+                                                fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
                                           }
 
@@ -59,6 +64,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                           fileInputsContainer.appendChild(inputs.file.grades_by_subject)
                                           fileInputsContainer.appendChild(inputs.file.struggling_students)
+
+                                          break;
+
+                                    case "gradeAssessmentReport":
+
+                                          while (fileInputsContainer.childNodes.length != 0) {
+                                                fileInputsContainer.firstChild.firstChild.value = ""
+                                                fileInputsContainer.removeChild(fileInputsContainer.firstChild)
+                                          }
+
+                                          tableauButton.setAttribute("href", "https://bi.timetoknow.co.il/#/workbooks/353/views")
+
+                                          fileInputsContainer.appendChild(inputs.file.grades_by_subject)
+                                          fileInputsContainer.appendChild(inputs.file.grades_by_question)
+                                          fileInputsContainer.appendChild(inputs.file.class_grades_by_subject)
+                                          fileInputsContainer.appendChild(inputs.file.class_grades_by_question)
 
                                           break;
                               }
@@ -100,6 +121,16 @@ document.addEventListener("DOMContentLoaded", () => {
                   else if (selectedReportType == "practiceReport"
                         && inputs.file.grades_by_subject.firstElementChild.files.length > 0
                         && inputs.file.struggling_students.firstElementChild.files.length > 0
+                        && inputs.text.school.value != ""
+                        && inputs.text.grade.value != ""
+                        && inputs.text.classes.value != ""
+                        && inputs.text.reportDate.value != ""
+                        && inputs.text.assessmentName.value != "") submitButton.disabled = false
+                  else if (selectedReportType == "gradeAssessmentReport"
+                        && inputs.file.grades_by_subject.firstElementChild.files.length > 0
+                        && inputs.file.grades_by_question.firstElementChild.files.length > 0
+                        && inputs.file.class_grades_by_subject.firstElementChild.files.length > 0
+                        && inputs.file.class_grades_by_question.firstElementChild.files.length > 0
                         && inputs.text.school.value != ""
                         && inputs.text.grade.value != ""
                         && inputs.text.classes.value != ""
