@@ -38,7 +38,7 @@ module.exports = {
       practiceReport(metadata, data) {
 
             let wb = new xl.Workbook(wbMetadata.wbOptions)
-
+            
             for (let i = 0; i < data.length; i++) {
                   
                   switch (data[i].name) {
@@ -47,19 +47,12 @@ module.exports = {
                               let sheet1 = createSheetLayout(wb, metadata, "מיפוי מיומנויות", data[i].name)
                               insertReportData(wb, sheet1, data[i].data, data[i].name)
                               break;
-                  
-                        case "grades_by_question":
-                              let sheet2 = createSheetLayout(wb, metadata, "ציונים לפי שאלה", data[i].name)
-                              insertReportData(wb, sheet2, data[i].data, data[i].name)
-                              break;
-                  
+                              
                         case "struggling_students":
                               let sheet3 = createSheetLayout(wb, metadata, "מיפוי לתלמיד", "student_mapping")
                               insertReportData(wb, sheet3, data[i].data, "student_mapping")
-
-                              let sheet4 = createSheetLayout(wb, metadata, "קבוצות לפי נושא", "groups_by_subject")
-                              insertReportData(wb, sheet4, data[i].data, "groups_by_subject")
                               break;
+
                   }
             }
             

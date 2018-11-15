@@ -18,6 +18,7 @@ router.post("/assessmentReport", uploadInputs, (req, res) => {
   
   let wb = xlsx.assessmentReport(req.query, requestFilesToArrays(req.files))
   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן.xlsx`, res)
+  
   deleteAllTempFiles()
   
 })
@@ -31,6 +32,7 @@ router.post("/practiceReport", uploadInputs, (req, res) => {
   
   let wb = xlsx.practiceReport(req.query, requestFilesToArrays(req.files))
   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח תרגול.xlsx`, res)
+  
   deleteAllTempFiles()
   
 })
