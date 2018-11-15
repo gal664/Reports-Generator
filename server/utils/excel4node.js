@@ -123,8 +123,8 @@ function insertReportData(wb, sheet, data, sheetType) {
                         sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
                         if (parseInt(row[j]) !== NaN && i > 0) {
                               if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
-                              else if (row[j] >= 59 && row[j] <= 73) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
-                              else if (row[j] >= 74 && row[j] <= 84) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
                               else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
                         }
                   }
@@ -141,8 +141,8 @@ function insertReportData(wb, sheet, data, sheetType) {
                         else sheet.cell(i + startingRow, j + 1).string(row[j]).style(wb.createStyle(styles.reportData))
                         if (parseInt(row[j]) !== NaN && i > 0) {
                               if (row[j] >= 0 && row[j] <= 58) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.redCellFill))
-                              else if (row[j] >= 59 && row[j] <= 73) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
-                              else if (row[j] >= 74 && row[j] <= 84) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
+                              else if (row[j] >= 59 && row[j] <= 74) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.orangeCellFill))
+                              else if (row[j] >= 74 && row[j] <= 85) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.yellowCellFill))
                               else if (row[j] >= 85 && row[j] <= 100) sheet.cell(i + startingRow, j + 1).style(wb.createStyle(styles.greenCellFill))
                         }
                   }
@@ -200,8 +200,14 @@ function insertReportData(wb, sheet, data, sheetType) {
                               .string(newData[i].data[j])
                               .style(wb.createStyle(styles.reportDataNoBorderTopAndBottom))
                   }
-                  sheet.cell(startingRow + longestRow, i + 1)
+                  sheet.cell(startingRow + longestRow - 1, i + 1)
                         .style(wb.createStyle(styles.reportDataNoBorderTop))
+                  }
+                  
+            for (let i = 0; i < longestRow; i++){
+                  sheet.cell(startingRow + i, newData.length)
+                       .style(wb.createStyle(styles.reportDataNoBorderTopAndBottom))
+                  
             }
       }
 }
