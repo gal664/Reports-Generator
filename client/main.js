@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       inputs.file.struggling_students = createFileInputElement("struggling_students")
       inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject")
       inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question")
+      inputs.file.student_data = createFileInputElement("student_data")
 
       for (let i = 0; i < inputs.reportTypes.types.length; i++) {
 
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
                               tableauButton.classList.remove("disabled")
 
                               switch (selectedReportType) {
-                                    case "assessmentReport":
+                                    case "assessment":
 
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                           break;
 
-                                    case "practiceReport":
+                                    case "practice":
 
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                           break;
 
-                                    case "gradeAssessmentReport":
+                                    case "gradeAssessment":
 
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
@@ -80,6 +81,19 @@ document.addEventListener("DOMContentLoaded", () => {
                                           fileInputsContainer.appendChild(inputs.file.grades_by_question)
                                           fileInputsContainer.appendChild(inputs.file.class_grades_by_subject)
                                           fileInputsContainer.appendChild(inputs.file.class_grades_by_question)
+
+                                          break;
+
+                                    case "student":
+
+                                          while (fileInputsContainer.childNodes.length != 0) {
+                                                fileInputsContainer.firstChild.firstChild.value = ""
+                                                fileInputsContainer.removeChild(fileInputsContainer.firstChild)
+                                          }
+
+                                          tableauButton.setAttribute("href", "https://bi.timetoknow.co.il/#/workbooks/333/views")
+
+                                          fileInputsContainer.appendChild(inputs.file.student_data)
 
                                           break;
                               }
@@ -109,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             document.addEventListener(eventType, () => {
 
-                  if (selectedReportType == "assessmentReport"
+                  if (selectedReportType == "assessment"
                         && inputs.file.grades_by_subject.firstElementChild.files.length > 0
                         && inputs.file.grades_by_question.firstElementChild.files.length > 0
                         && inputs.file.struggling_students.firstElementChild.files.length > 0
@@ -118,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         && inputs.text.classes.value != ""
                         && inputs.text.reportDate.value != ""
                         && inputs.text.assessmentName.value != "") submitButton.disabled = false
-                  else if (selectedReportType == "practiceReport"
+                  else if (selectedReportType == "practice"
                         && inputs.file.grades_by_subject.firstElementChild.files.length > 0
                         && inputs.file.struggling_students.firstElementChild.files.length > 0
                         && inputs.text.school.value != ""
@@ -126,11 +140,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         && inputs.text.classes.value != ""
                         && inputs.text.reportDate.value != ""
                         && inputs.text.assessmentName.value != "") submitButton.disabled = false
-                  else if (selectedReportType == "gradeAssessmentReport"
+                  else if (selectedReportType == "gradeAssessment"
                         && inputs.file.grades_by_subject.firstElementChild.files.length > 0
                         && inputs.file.grades_by_question.firstElementChild.files.length > 0
                         && inputs.file.class_grades_by_subject.firstElementChild.files.length > 0
                         && inputs.file.class_grades_by_question.firstElementChild.files.length > 0
+                        && inputs.text.school.value != ""
+                        && inputs.text.grade.value != ""
+                        && inputs.text.classes.value != ""
+                        && inputs.text.reportDate.value != ""
+                        && inputs.text.assessmentName.value != "") submitButton.disabled = false
+                  else if (selectedReportType == "student"
+                        && inputs.file.student_data.firstElementChild.files.length > 0
                         && inputs.text.school.value != ""
                         && inputs.text.grade.value != ""
                         && inputs.text.classes.value != ""
@@ -162,5 +183,20 @@ function createFileInputElement(fileType) {
       label.innerHTML = fileType
       container.appendChild(label)
 
+      return container
+}
+
+function createTextInputElement(valueName, value) {
+
+      let container = document.createElement("div")
+      container.className = "form-group mb-3"
+
+      let input = document.createElement("input")
+      input.className = "form-control"
+      input.id = valueName
+      input.placeholder = value
+      input.setAttribute("type", "text")
+      container.appendChild(input)
+      
       return container
 }
