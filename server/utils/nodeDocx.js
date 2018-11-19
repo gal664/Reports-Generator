@@ -1,6 +1,7 @@
 const fs = require("fs")
 const docx = require("docx")
 const sheetLayoutConfig = require("../utils/sheetLayoutConfig")
+const figures = require('figures');
 
 const logoPath = sheetLayoutConfig.logoImagePath
 
@@ -8,7 +9,12 @@ module.exports = {
 
       studentReport(metadata, data) {
 
-            let doc = new docx.Document()
+            let doc = new docx.Document(undefined, {
+                  top: 500,
+                  right: 750,
+                  bottom: 500,
+                  left: 750,
+              })
 
             let assessmentTitle = data[0].data.assessmentTitle
             let grade = data[0].data.grade
@@ -28,12 +34,13 @@ module.exports = {
                   
                   if(i == 0) addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, `שלום ${studentName},`, "right", false)
-                  addParagraphString(doc, `לפניך משוב על הישגיך במבחן "${assessmentTitle}"`, "right", false)
+                  addParagraphString(doc, `לפניך משוב על הישגיך במבחן ${assessmentTitle}`, "right", false)
                   addParagraphString(doc, `ציונך במבחן: ${averageScore}`, "right", false)
+                  addParagraphString(doc, "", "center", false)
                   
-                  // insert subjects table
                   const table = doc.createTable(subjects.length + 1, 6)
-
+                  table.setWidth(docx.WidthType.PERCENTAGE, '100%');
+                  
                   let tableHeaders = [
                         "במידה מועטה מאוד",
                         "במידה מועטה",
@@ -51,19 +58,19 @@ module.exports = {
 
                         switch (verbalScore) {
                               case "במידה מועטה מאוד":
-                                    addTableCell(table, x + 1, 0, "V")
+                                    addTableCell(table, x + 1, 0, figures('✔︎'))
                                     break;
                               case "במידה מועטה":
-                                    addTableCell(table, x + 1, 1, "V")
+                                    addTableCell(table, x + 1, 1, figures('✔︎'))
                                     break;
                               case "במידה חלקית":
-                                    addTableCell(table, x + 1, 2, "V")
+                                    addTableCell(table, x + 1, 2, figures('✔︎'))
                                     break;
                               case "במידה רבה":
-                                    addTableCell(table, x + 1, 3, "V")
+                                    addTableCell(table, x + 1, 3, figures('✔︎'))
                                     break;
                               case "במידה רבה מאוד":
-                                    addTableCell(table, x + 1, 4, "V")
+                                    addTableCell(table, x + 1, 4, figures('✔︎'))
                                     break;
                         }
 
@@ -77,6 +84,7 @@ module.exports = {
                   }
 
                   // insert strings
+                  addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, "בהצלחה רבה,", "center", false)
                   addParagraphString(doc, "צוות עת הדעת", "center", false)
                   addParagraphString(doc, "", "center", true)
@@ -97,7 +105,7 @@ function addTableCell(table, row, col, string){
       let paragraph = new docx.Paragraph().center()
       paragraph.addRun(text)
       table.getCell(row, col).addContent(paragraph)
-      
+
 }
 
 function addParagraphString(doc, string, alignment, isPageBreak){
