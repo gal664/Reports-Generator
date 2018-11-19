@@ -163,16 +163,19 @@ function requestFilesToArrays(files) {
         encoding: "utf8"
       });
       let decodedSplit = decoded.split("\r\n");
+      
       let data = {
         students: []
       };
 
-      for (let i = 1; i < decodedSplit.length; i++) {
-        let splitRow = decodedSplit[i].split(",");
+      for (let i = 0; i < decodedSplit.length - 1; i++) {
+
+        // to split the string only where there is a comma NOT inside a double quotes
+        let splitRow = decodedSplit[i].match(/("[^"]*")|[^,]+/g);
 
         if (!data.assessmentTitle) data.assessmentTitle = splitRow[0];
         if (!data.schoolName) data.schoolName = splitRow[1];
-
+        
         let studentIndex = data.students.find(
           student => student.name == splitRow[5]
         );
