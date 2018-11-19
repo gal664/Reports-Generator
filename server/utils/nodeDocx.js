@@ -35,6 +35,7 @@ module.exports = {
                   if(i == 0) addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, `שלום ${studentName},`, "right", false)
                   addParagraphString(doc, `לפניך משוב על הישגיך במבחן ${assessmentTitle}`, "right", false)
+                  addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, `ציונך במבחן: ${averageScore}`, "right", false)
                   addParagraphString(doc, "", "center", false)
                   
@@ -102,7 +103,7 @@ module.exports = {
 function addTableCell(table, row, col, string){
       
       let text = new docx.TextRun(string).size(24).font("calibri").bold().rightToLeft()
-      let paragraph = new docx.Paragraph().center()
+      let paragraph = new docx.Paragraph().center().spacing({before:250, after:250})
       paragraph.addRun(text)
       table.getCell(row, col).addContent(paragraph)
 
