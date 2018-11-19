@@ -21,8 +21,10 @@ module.exports = {
                   let averageScore = students[i].averageStudentScore
                   let studyclassName = students[i].studentStudyClassName
                   let subjects = students[i].subjects
-                  
-                  let logo = doc.createImage(fs.readFileSync(logoPath))
+
+                  let LogoWidth = 605
+                  let LogoHeight = 250
+                  let logo = doc.createImage(fs.readFileSync(logoPath), LogoWidth/3, LogoHeight/3)
                   
                   if(i == 0) addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, `שלום ${studentName},`, "right", false)
@@ -95,6 +97,7 @@ function addTableCell(table, row, col, string){
       let paragraph = new docx.Paragraph().center()
       paragraph.addRun(text)
       table.getCell(row, col).addContent(paragraph)
+      
 }
 
 function addParagraphString(doc, string, alignment, isPageBreak){
