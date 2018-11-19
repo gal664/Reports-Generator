@@ -16,37 +16,85 @@ module.exports = {
             let students = data[0].data.students
 
             for (let i = 0; i < students.length; i++) {
-
+                  
                   let studentName = students[i].name
                   let averageScore = students[i].averageStudentScore
                   let studyclassName = students[i].studentStudyClassName
                   let subjects = students[i].subjects
-
-                  doc.createImage(fs.readFileSync(logoPath))
-
+                  
+                  let logo = doc.createImage(fs.readFileSync(logoPath))
+                  
+                  if(i == 0) addParagraphString(doc, "", "center", false)
                   addParagraphString(doc, `שלום ${studentName},`, "right", false)
                   addParagraphString(doc, `לפניך משוב על הישגיך במבחן "${assessmentTitle}"`, "right", false)
                   addParagraphString(doc, `ציונך במבחן: ${averageScore}`, "right", false)
-
+                  
                   // insert subjects table
+                  const table = doc.createTable(subjects.length + 1, 6)
 
-                  for (let j = 0; j < subjects.length; j++) {
+                  let tableHeaders = [
+                        "במידה מועטה מאוד",
+                        "במידה מועטה",
+                        "במידה חלקית",
+                        "במידה רבה",
+                        "במידה רבה מאוד"
+                  ]
 
-                        let subjectName = subjects[j].name
-                        let verbalScore = subjects[j].verbalScore
+                  
+                  for(let x = 0; x < subjects.length; x++){
+                       
+                        let subjectName = subjects[x].name
+                        let verbalScore = subjects[x].verbalScore
                         let numeralScore = getNumeralScore(verbalScore)
+
+                        switch (verbalScore) {
+                              case "במידה מועטה מאוד":
+                                    addTableCell(table, x + 1, 0, "V")
+                                    break;
+                              case "במידה מועטה":
+                                    addTableCell(table, x + 1, 1, "V")
+                                    break;
+                              case "במידה חלקית":
+                                    addTableCell(table, x + 1, 2, "V")
+                                    break;
+                              case "במידה רבה":
+                                    addTableCell(table, x + 1, 3, "V")
+                                    break;
+                              case "במידה רבה מאוד":
+                                    addTableCell(table, x + 1, 4, "V")
+                                    break;
+                        }
+
+                        for(let j = 0; j < 6; j++){
+
+                              if(x == 0) addTableCell(table, x, j, tableHeaders[j])
+                              if(j == 5) addTableCell(table, x + 1, j, subjectName)
+                              
+                        }
 
                   }
 
                   // insert strings
                   addParagraphString(doc, "בהצלחה רבה,", "center", false)
                   addParagraphString(doc, "צוות עת הדעת", "center", false)
-                  addParagraphString(doc, "עת הדעת | טלפון: 073-277-4800 | support-il@timetoknow.co.il | www.timetoknow.co.il", "center", true)
+                  addParagraphString(doc, "", "center", true)
             }
+
+            let footerString = "עת הדעת | טלפון: 073-277-4800 | support-il@timetoknow.co.il | www.timetoknow.co.il"
+            let footerTextRun = new docx.TextRun(footerString).size(24).font("calibri").rightToLeft()
+            doc.Footer.createParagraph(footerTextRun).center()
 
             return doc
       }
 
+}
+
+function addTableCell(table, row, col, string){
+      
+      let text = new docx.TextRun(string).size(24).font("calibri").bold().rightToLeft()
+      let paragraph = new docx.Paragraph().center()
+      paragraph.addRun(text)
+      table.getCell(row, col).addContent(paragraph)
 }
 
 function addParagraphString(doc, string, alignment, isPageBreak){
@@ -71,12 +119,12 @@ function addParagraphString(doc, string, alignment, isPageBreak){
             }
       }
 
-
       paragraph.addRun(text)
       doc.addParagraph(paragraph)
 }
 
 function getNumeralScore(score) {
+      
       switch (score) {
             case "במידה מועטה מאוד": return "0-40"
             case "במידה מועטה": return "41-60"
@@ -84,4 +132,5 @@ function getNumeralScore(score) {
             case "במידה רבה": return "76-85"
             case "במידה רבה מאוד": return "86-100"
       }
+
 }

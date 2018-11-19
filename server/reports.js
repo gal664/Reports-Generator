@@ -111,7 +111,7 @@ function requestFilesToArrays(files) {
 
         let studentIndex = data.students.find(student => student.name == splitRow[6])
 
-        if (!studentIndex) {
+        if (!studentIndex && splitRow[6]) {
 
           data.students.push({
             name: splitRow[6],
@@ -122,11 +122,11 @@ function requestFilesToArrays(files) {
             ]
           })
 
-        } else {
+        } else if(splitRow[6]){
 
           let subjectIndex = studentIndex.subjects.find(subject => subject.name == splitRow[1])
 
-          if (!subjectIndex) studentIndex.subjects.push(
+          if (!subjectIndex && splitRow[1]) studentIndex.subjects.push(
             { name: splitRow[1], verbalScore: splitRow[7] }
           )
 
