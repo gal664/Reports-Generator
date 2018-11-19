@@ -96,6 +96,67 @@ module.exports = {
             doc.Footer.createParagraph(footerTextRun).center()
 
             return doc
+      },
+      recommendationsReport(metadata, data) {
+
+            // console.log(data[0].data.students)
+            // {
+            //       name: 'שחר מאיה',
+            //       studentStudyClassName: 'אנגלית ה1',
+            //       Recommendations: ['Image Description  - Family and School']
+            // }
+            let doc = new docx.Document(undefined, {
+                  top: 500,
+                  right: 750,
+                  bottom: 500,
+                  left: 750,
+              })
+
+            let assessmentTitle = data[0].data.assessmentTitle
+            let schoolName = data[0].data.schoolName
+            let students = data[0].data.students
+
+            for (let i = 0; i < students.length; i++) {
+                  
+                  let studentName = students[i].name
+                  let studyclassName = students[i].studentStudyClassName
+                  let Recommendations = students[i].Recommendations
+
+                  let LogoWidth = 605
+                  let LogoHeight = 250
+                  let logo = doc.createImage(fs.readFileSync(logoPath), LogoWidth/3, LogoHeight/3)
+                  
+                  if(i == 0) addParagraphString(doc, "", "right", false)
+                  addParagraphString(doc, `שלום ${studentName},`, "right", false)
+                  addParagraphString(doc, "", "right", false)
+                  addParagraphString(doc, "לפניך שמות תרגולים שאנו ממליצים לך לתרגל כדי לשלוט טוב יותר בנושאים הנלמדים.", "right", false)
+                  addParagraphString(doc, `התרגולים נמצאים באתר עת הדעת בקורס "${assessmentTitle}".`, "right", false)
+                  addParagraphString(doc, "כל תרגול כולל בתוכו מספר תרגילים וניתן לעבוד עליהם בהמשכים.", "right", false)
+                  addParagraphString(doc, "להלן רשימת התרגולים המומלצים לך לתרגול:", "right", false)
+                  addParagraphString(doc, "", "center", false)
+                  
+                  
+                  for(let x = 0; x < Recommendations.length; x++){
+                        
+                        addParagraphString(doc, `     ●   ${Recommendations[x]}`, "right", false)
+
+                  }
+
+                  // insert strings
+                  addParagraphString(doc, "", "center", false)
+                  addParagraphString(doc, "אם נתקלת בבעיה טכנית באפשרותך לפנות למוקד התמיכה שלנו בפרטים המופיעים מטה.", "right", false)
+                  addParagraphString(doc, "", "center", false)
+                  addParagraphString(doc, "", "center", false)
+                  addParagraphString(doc, "מאחלים לך הצלחה רבה,", "center", false)
+                  addParagraphString(doc, "צוות עת הדעת", "center", false)
+                  addParagraphString(doc, "", "center", true)
+            }
+
+            let footerString = "עת הדעת | טלפון: 073-277-4800 | support-il@timetoknow.co.il | www.timetoknow.co.il"
+            let footerTextRun = new docx.TextRun(footerString).size(24).font("calibri").rightToLeft()
+            doc.Footer.createParagraph(footerTextRun).center()
+
+            return doc
       }
 
 }

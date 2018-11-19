@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
       inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject")
       inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question")
       inputs.file.student_data = createFileInputElement("student_data")
+      inputs.file.recommendations_data = createFileInputElement("recommendations_data")
 
       for (let i = 0; i < inputs.reportTypes.types.length; i++) {
 
@@ -96,6 +97,19 @@ document.addEventListener("DOMContentLoaded", () => {
                                           fileInputsContainer.appendChild(inputs.file.student_data)
 
                                           break;
+
+                                    case "recommendations":
+
+                                          while (fileInputsContainer.childNodes.length != 0) {
+                                                fileInputsContainer.firstChild.firstChild.value = ""
+                                                fileInputsContainer.removeChild(fileInputsContainer.firstChild)
+                                          }
+
+                                          tableauButton.setAttribute("href", "https://bi.timetoknow.co.il/#/workbooks/330/views")
+
+                                          fileInputsContainer.appendChild(inputs.file.recommendations_data)
+
+                                          break;
                               }
                         }
                   }, 1);
@@ -152,6 +166,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         && inputs.text.assessmentName.value != "") submitButton.disabled = false
                   else if (selectedReportType == "student"
                         && inputs.file.student_data.firstElementChild.files.length > 0
+                        && inputs.text.school.value != ""
+                        && inputs.text.grade.value != ""
+                        && inputs.text.classes.value != ""
+                        && inputs.text.reportDate.value != ""
+                        && inputs.text.assessmentName.value != "") submitButton.disabled = false
+                  else if (selectedReportType == "recommendations"
+                        && inputs.file.recommendations_data.firstElementChild.files.length > 0
                         && inputs.text.school.value != ""
                         && inputs.text.grade.value != ""
                         && inputs.text.classes.value != ""
