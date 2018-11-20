@@ -17,13 +17,32 @@ document.addEventListener("DOMContentLoaded", () => {
       tableauButton = document.querySelector("#tableauButton")
 
       fileInputsContainer = document.querySelector("#fileInputs")
-      inputs.file.grades_by_subject = createFileInputElement("grades_by_subject")
-      inputs.file.grades_by_question = createFileInputElement("grades_by_question")
-      inputs.file.struggling_students = createFileInputElement("struggling_students")
-      inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject")
-      inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question")
-      inputs.file.student_data = createFileInputElement("student_data")
-      inputs.file.recommendations_data = createFileInputElement("recommendations_data")
+      inputs.file.grades_by_subject = createFileInputElement("grades_by_subject","ציוני תלמיד לפי מבחן")
+      inputs.file.grades_by_question = createFileInputElement("grades_by_question","ציוני תלמיד לפי שאלה")
+      inputs.file.struggling_students = createFileInputElement("struggling_students","תלמידים מתקשים לפי נושאים")
+      inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject","ציוני כיתה לפי מבחן")
+      inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question","ציוני כיתה לפי שאלה")
+      inputs.file.student_data = createFileInputElement("student_data","נתוני תלמידים")
+      inputs.file.recommendations_data = createFileInputElement("recommendations_data","המלצות לתלמידים")
+
+      for (var inputElement in inputs.file) {
+            
+            if (inputs.file.hasOwnProperty(inputElement)) {
+                  
+                  let element = inputs.file[inputElement]
+                  
+                  element.addEventListener("change", (event) => {
+                              
+                        let input = element.children[0]
+                        let label = element.children[1]
+                        if (element.firstChild.files.length > 0) {
+                              label.innerHTML = input.files[0].name
+                              label.style.color = "#00d326"
+                        }
+                        
+                  })
+            }
+      }
 
       for (let i = 0; i < inputs.reportTypes.types.length; i++) {
 
@@ -32,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   
                   setTimeout(() => {
                         
-                        if (type.classList.contains("active")) selectedReportType = type.id
+                        selectedReportType = type.id
                         console.log(selectedReportType)
 
                         if (selectedReportType != null) {
@@ -186,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-function createFileInputElement(fileType) {
+function createFileInputElement(fileType, text) {
 
       let container = document.createElement("div")
       container.className = "custom-file mb-3"
@@ -196,12 +215,14 @@ function createFileInputElement(fileType) {
       input.id = fileType
       input.name = fileType
       input.setAttribute("type", "file")
+      input.setAttribute("accept", ".csv")
       container.appendChild(input)
 
       let label = document.createElement("label")
       label.className = "custom-file-label"
       label.setAttribute("for", fileType)
-      label.innerHTML = fileType
+      label.setAttribute("originallabeltext", text)
+      label.innerHTML = text
       container.appendChild(label)
 
       return container
