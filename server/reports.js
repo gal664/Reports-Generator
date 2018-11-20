@@ -83,7 +83,7 @@ router.post("/gradeAssessment", uploadInputs, (req, res) => {
   let parsedReqFiles = filesParser(req.files)
 
   // create a workbook, passing the query string parameters and parsed file data  
-  let wb = excelWorker.practiceReport(req.query, parsedReqFiles)
+  let wb = excelWorker.gradeAssessmentReport(req.query, parsedReqFiles)
 
   // when the workbook is created, return it in the response
   wb.write(`${req.query.classes} - ${req.query.assessmentname} - דוח מבחן שכבתי.xlsx`, res)
@@ -114,7 +114,7 @@ router.post("/student", uploadInputs, (req, res) => {
   let parsedReqFiles = filesParser(req.files)
 
   // create a doc from the parsed files' data
-  let doc = wordWorker.studentReport(req.query, parsedReqFiles)
+  let doc = wordWorker.studentReport(parsedReqFiles)
 
   //send the doc created in the response using packer instance defined above
   packer.toBuffer(doc).then(buffer => {
@@ -148,7 +148,7 @@ router.post("/recommendations", uploadInputs, (req, res) => {
   let parsedReqFiles = filesParser(req.files)
 
   //send the doc created in the response using packer instance defined above
-  let doc = wordWorker.recommendationsReport(req.query, parsedReqFiles)
+  let doc = wordWorker.recommendationsReport(parsedReqFiles)
   packer.toBuffer(doc).then((buffer) => {
     fs.writeFileSync(filePath, buffer)
     res.download(filePath)
