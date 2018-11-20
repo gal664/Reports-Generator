@@ -1,6 +1,6 @@
 const fs = require("fs")
 const docx = require("docx")
-const sheetLayoutConfig = require("../utils/sheetLayoutConfig")
+const sheetLayoutConfig = require("./sheetLayoutConfig")
 const figures = require('figures');
 
 const logoPath = sheetLayoutConfig.logoImagePath
