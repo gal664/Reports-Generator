@@ -1,0 +1,38 @@
+.btn-default {
+      background: #a93794;
+      color: white;
+}
+
+.btn-default:hover {
+      background: #7b2f6d;
+      color: white;
+}
+
+a:not([href]):not([tabindex]) {
+      color: white;
+}
+
+#animatedReportTypeIndicator {
+      height: 10px;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+}
+
+#animatedReportTypeIndicator.green { background: #15a852; }
+#animatedReportTypeIndicator.blue { background: #0d56a6; }
+#animatedReportTypeIndicator.purple { background: #8c489b; }
+#animatedReportTypeIndicator.cyan { background: #19a99f; }
+#animatedReportTypeIndicator.darkPurple { background: #43425d; }
+
+.slide { animation: slide 400ms ease-in; }
+
+@keyframes slide {
+      from {
+            width: 0%;
+      }
+      to {
+            width: 100%;
+      }
+}

@@ -8,38 +8,39 @@ let tableauButton
 let submitButton
 let selectedReportType
 let fileInputsContainer
-
+let animatedReportTypeIndicator
 document.addEventListener("DOMContentLoaded", () => {
 
       inputs.reportTypes.parent = document.querySelector("#selectReportType")
       inputs.reportTypes.types = inputs.reportTypes.parent.children
+      animatedReportTypeIndicator = document.querySelector("#animatedReportTypeIndicator")
 
       tableauButton = document.querySelector("#tableauButton")
 
       fileInputsContainer = document.querySelector("#fileInputs")
-      inputs.file.grades_by_subject = createFileInputElement("grades_by_subject","ציוני תלמיד לפי מבחן")
-      inputs.file.grades_by_question = createFileInputElement("grades_by_question","ציוני תלמיד לפי שאלה")
-      inputs.file.struggling_students = createFileInputElement("struggling_students","תלמידים מתקשים לפי נושאים")
-      inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject","ציוני כיתה לפי מבחן")
-      inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question","ציוני כיתה לפי שאלה")
-      inputs.file.student_data = createFileInputElement("student_data","נתוני תלמידים")
-      inputs.file.recommendations_data = createFileInputElement("recommendations_data","המלצות לתלמידים")
+      inputs.file.grades_by_subject = createFileInputElement("grades_by_subject", "ציוני תלמיד לפי מבחן")
+      inputs.file.grades_by_question = createFileInputElement("grades_by_question", "ציוני תלמיד לפי שאלה")
+      inputs.file.struggling_students = createFileInputElement("struggling_students", "תלמידים מתקשים לפי נושאים")
+      inputs.file.class_grades_by_subject = createFileInputElement("class_grades_by_subject", "ציוני כיתה לפי מבחן")
+      inputs.file.class_grades_by_question = createFileInputElement("class_grades_by_question", "ציוני כיתה לפי שאלה")
+      inputs.file.student_data = createFileInputElement("student_data", "נתוני תלמידים")
+      inputs.file.recommendations_data = createFileInputElement("recommendations_data", "המלצות לתלמידים")
 
       for (var inputElement in inputs.file) {
-            
+
             if (inputs.file.hasOwnProperty(inputElement)) {
-                  
+
                   let element = inputs.file[inputElement]
-                  
+
                   element.addEventListener("change", (event) => {
-                              
+
                         let input = element.children[0]
                         let label = element.children[1]
                         if (element.firstChild.files.length > 0) {
                               label.innerHTML = input.files[0].name
                               label.style.color = "#00d326"
                         }
-                        
+
                   })
             }
       }
@@ -48,11 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let type = inputs.reportTypes.types[i]
             type.addEventListener("click", () => {
-                  
+
                   setTimeout(() => {
-                        
+
                         selectedReportType = type.id
-                        console.log(selectedReportType)
 
                         if (selectedReportType != null) {
 
@@ -61,6 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
                               switch (selectedReportType) {
                                     case "assessment":
 
+                                          animatedReportTypeIndicator.className = "green slide"
+                                          setTimeout(() => {
+                                                animatedReportTypeIndicator.classList.remove("slide")
+                                          }, 400);
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
@@ -76,6 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     case "practice":
 
+                                          animatedReportTypeIndicator.className = "purple slide"
+                                          setTimeout(() => {
+                                                animatedReportTypeIndicator.classList.remove("slide")
+                                          }, 400);
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
@@ -90,6 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     case "gradeAssessment":
 
+                                          animatedReportTypeIndicator.className = "darkPurple slide"
+                                          setTimeout(() => {
+                                                animatedReportTypeIndicator.classList.remove("slide")
+                                          }, 400);
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
@@ -106,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     case "student":
 
+                                          animatedReportTypeIndicator.className = "cyan slide"
+                                          setTimeout(() => {
+                                                animatedReportTypeIndicator.classList.remove("slide")
+                                          }, 400);
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
@@ -119,6 +135,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     case "recommendations":
 
+                                          animatedReportTypeIndicator.className = "blue slide"
+                                          setTimeout(() => {
+                                                animatedReportTypeIndicator.classList.remove("slide")
+                                          }, 400);
                                           while (fileInputsContainer.childNodes.length != 0) {
                                                 fileInputsContainer.firstChild.firstChild.value = ""
                                                 fileInputsContainer.removeChild(fileInputsContainer.firstChild)
@@ -239,6 +259,6 @@ function createTextInputElement(valueName, value) {
       input.placeholder = value
       input.setAttribute("type", "text")
       container.appendChild(input)
-      
+
       return container
 }
