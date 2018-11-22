@@ -29,10 +29,6 @@ a:not([href]):not([tabindex]) {
 .slide { animation: slide 400ms ease-in; }
 
 @keyframes slide {
-      from {
-            width: 0%;
-      }
-      to {
-            width: 100%;
-      }
+      from { width: 0%; }
+      to { width: 100%; }
 }

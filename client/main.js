@@ -36,9 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         let input = element.children[0]
                         let label = element.children[1]
+
                         if (element.firstChild.files.length > 0) {
                               label.innerHTML = input.files[0].name
                               label.style.color = "#00d326"
+                        } else {
+                              label.innerHTML = label.getAttribute("originallabeltext")
+                              label.style.color = "red"
                         }
 
                   })
