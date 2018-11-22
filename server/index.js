@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const path = require("path")
 const app = express()
 const reports = require("./reports")
-const port = 9090
+const port = process.env.PORT || 9090
 
 app.use(bodyParser.json())
 
